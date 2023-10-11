@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-title {
+  color: var(--gray-50, #F9FAFB);
+  font-family: Inter;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.text-subtitle {
+  color: var(--gray-50, #F9FAFB);
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.text-body {
+  color: var(--gray-50, #F9FAFB);
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media (prefers-color-scheme: light) {
+  .text-title {
+    color: #000000;
+  }
+
+  .text-subtitle {
+    color: #000000;
+  }
+
+  .text-body {
+    color: #000000;
+  }
+}
+
+body {
+  height: 100vh;
+  padding: 0;
+}
+
+#root {
+  height: 100%;
+}
