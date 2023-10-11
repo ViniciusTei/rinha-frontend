@@ -1,8 +1,59 @@
 import { ChangeEvent, useRef, useState } from 'react'
 
+type JSONContentType = {
+  key: string
+  type: 'array' | 'object' | 'primitive'
+  value: unknown
+}
+
 type JSONContent = {
   title: string
-  content: object
+  content: JSONContentType[]
+}
+
+function handleJSONStructure(value: unknown): JSONContentType {
+  if (Array.isArray(value)) {
+    return {
+      key: '',
+      type: 'array',
+      value: value.map((item) => handleJSONStructure(item))
+    }
+  } else if (typeof value === 'object' && value !== null) {
+    const jsonArr: JSONContentType[] = []
+    for (const [key, val] of Object.entries(value)) {
+      jsonArr.push({
+        key,
+        type: 'object',
+        value: handleJSONStructure(val)
+      })
+    }
+    return {
+      key: '',
+      type: 'array',
+      value: jsonArr
+    }
+  } else {
+    return {
+      key: '',
+      type: 'primitive',
+      value
+    }
+  }
+}
+
+// TODO handle large files
+function factory(data: object) {
+  const jsonArr = [] as JSONContentType[]
+
+  for (const [key, value] of Object.entries(data)) {
+      jsonArr.push({
+        key,
+        type: 'object',
+        value: handleJSONStructure(value)
+      })
+  }
+
+  return jsonArr
 }
 
 function App() {
@@ -27,7 +78,7 @@ function App() {
             res.json().then(content => {
               setJson({
                 title: file.name,
-                content: content
+                content: factory(content)
               })
             })
           } else {
@@ -39,12 +90,15 @@ function App() {
 
   }
 
+  // TODO add accessibilty to content on screen
   if (json) {
     return (
       <main className="h-full text-body flex flex-col items-center">
         <h1 className="text-subtitle">{json.title}</h1>
-        <pre>{JSON.stringify(json.content, null, 2)}</pre>
-
+        <div>
+          {json.content.map(c => (c.key))}
+        </div>
+  
       </main>
     )
   }
